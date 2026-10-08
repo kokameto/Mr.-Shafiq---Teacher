@@ -109,40 +109,137 @@ function speak(text,lang="en"){
  window.speechSynthesis.speak(utterance);
 }
 function welcomeSpeech(){if(currentLanguage==="ar")speak("Hello champion! I am Mr. Shafiq. Today we will learn English together.","en");else speak("Hello! I am Mr. Shafiq. Welcome to our English lesson.","en");}
-function stopSpeech(){if("speechSynthesis" in window)window.speechSynthesis.cancel();document.getElementById("voiceStatus").textContent="";}
-function respondToStudent(){
- const input=document.getElementById("studentInput").value.trim(),response=document.getElementById("studentResponse");
- if(!input){response.textContent=currentLanguage==="ar"?"اكتب كلمة أو جملة أولًا، وسنبدأ التدريب!":"Type a word or sentence first, and let's practise!";return;}
- response.textContent=currentLanguage==="ar"?"أحسنت على المحاولة! اقرأ ما كتبت بصوت مرتفع. هذه النسخة تجريبية؛ المحادثة الذكية الحقيقية تحتاج إلى ربط خدمة ذكاء اصطناعي.":"Great effort! Try reading your sentence aloud. This prototype needs an AI service connection for real intelligent conversation.";
+function stopSpeech() {
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+  document.getElementById("voiceStatus").textContent = "";
 }
-function startListening(){
- const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SpeechRecognition){document.getElementById("heardText").textContent=currentLanguage==="ar"?"متصفحك لا يدعم التعرف على الصوت. جرّب فتح الموقع في Google Chrome واسمح باستخدام الميكروفون.":"Your browser does not support speech recognition. Try Google Chrome and allow microphone access.";return;}
- const recognition=new SpeechRecognition();recognition.lang="en-US";recognition.interimResults=false;recognition.maxAlternatives=1;
- document.getElementById("heardText").textContent=currentLanguage==="ar"?"🎙️ أستمع إليك الآن... تحدث بالإنجليزية.":"🎙️ Listening... Speak in English.";
- recognition.onresult=function(event){
-  const studentText=event.results[0][0].transcript.trim();
-  document.getElementById("heardText").textContent=(currentLanguage==="ar"?"أنت قلت: ":"You said: ")+studentText;
-  const text=studentText.toLowerCase();let answer;
-  if(text.includes("hello")||text.includes("hi"))answer="Hello! Welcome to my English class. How are you today?";
-  else if(text.includes("how are you"))answer="I am fine, thank you! How are you?";
-  else if(text.includes("your name")||text.includes("who are you"))answer="My name is Mr. Shafiq. I am your English teacher.";
-  else if(text.includes("thank"))answer="You are welcome! Keep practising your English.";
-  else if(text.includes("good morning"))answer="Good morning! I hope you have a wonderful day.";
-  else answer="Good try! Please say that again using a simple English sentence.";
-  lastVoiceAnswer=answer;
-  document.getElementById("voiceAnswer").textContent=(currentLanguage==="ar"?"مستر شفيق: ":"Mr. Shafiq: ")+answer;
-  speak(answer,"en");
- };
- recognition.onerror=function(event){
-  let msg="لم أتمكن من سماعك. تأكد من السماح باستخدام الميكروفون، ثم حاول مجددًا.";
-  if(event.error==="not-allowed")msg="الميكروفون غير مسموح. افتح إعدادات الموقع واسمح باستخدام الميكروفون.";
-  if(event.error==="no-speech")msg="لم أسمع صوتًا. حاول التحدث بوضوح ثم أعد المحاولة.";
-  document.getElementById("heardText").textContent=currentLanguage==="ar"?msg:"I couldn't hear you. Check microphone permission and try again.";
- };
- try{recognition.start();}catch(e){document.getElementById("heardText").textContent="انتظر لحظة ثم حاول مرة أخرى.";}
+  async function askAI(message) {
+  const response = await fetch(
+    "https://mr-shafiq-teacher.koka878.workers.dev/",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: message,
+        language: currentLanguage === "en" ? "en" : "ar"
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok || !data.answer) {
+    throw new Error(data.error || "تعذر الحصول على إجابة.");
+  }
+
+  return data.answer;
 }
-function repeatAnswer(){if(lastVoiceAnswer)speak(lastVoiceAnswer,"en");else document.getElementById("voiceAnswer").textContent=currentLanguage==="ar"?"تحدث أولًا حتى يتمكن مستر شفيق من الرد عليك.":"Speak first so Mr. Shafiq can reply.";}
+
+async function respondToStudent() {
+  const input = document.getElementById("studentInput").value.trim();
+  const response = document.getElementById("studentResponse");
+
+  if (!input) {
+    response.textContent = currentLanguage === "ar"
+      ? "اكتب سؤالك أولًا يا بطل!"
+      : "Please type your question first!";
+    return;
+  }
+
+  response.textContent = currentLanguage === "ar"
+    ? "مستر شفيق يفكر في إجابتك... 🤔"
+    : "Mr. Shafiq is thinking... 🤔";
+
+  try {
+    const answer = await askAI(input);
+    response.textContent = answer;
+    lastVoiceAnswer = answer;
+    speak(answer, currentLanguage === "en" ? "en" : "ar");
+  } catch (error) {
+    response.textContent = currentLanguage === "ar"
+      ? "عذرًا يا بطل، لم أستطع الاتصال بالمعلم الذكي. حاول مرة أخرى."
+      : "Sorry! I couldn't connect to the AI teacher. Please try again.";
+    console.error(error);
+  }
+}
+
+function startListening() {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    document.getElementById("heardText").textContent =
+      "متصفحك لا يدعم التعرف على الصوت. جرّب Google Chrome.";
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = currentLanguage === "en" ? "en-US" : "ar-SA";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  document.getElementById("heardText").textContent =
+    currentLanguage === "ar"
+      ? "🎙️ أستمع إليك الآن..."
+      : "🎙️ Listening...";
+
+  recognition.onresult = async function(event) {
+    const studentText = event.results[0][0].transcript.trim();
+
+    document.getElementById("heardText").textContent =
+      (currentLanguage === "ar" ? "أنت قلت: " : "You said: ") +
+      studentText;
+
+    const answerBox = document.getElementById("voiceAnswer");
+    answerBox.textContent = currentLanguage === "ar"
+      ? "مستر شفيق يفكر في إجابتك... 🤔"
+      : "Mr. Shafiq is thinking... 🤔";
+
+    try {
+      const answer = await askAI(studentText);
+      lastVoiceAnswer = answer;
+      answerBox.textContent =
+        (currentLanguage === "ar" ? "مستر شفيق: " : "Mr. Shafiq: ") +
+        answer;
+
+      speak(answer, currentLanguage === "en" ? "en" : "ar");
+    } catch (error) {
+      answerBox.textContent = currentLanguage === "ar"
+        ? "تعذر الاتصال بالمعلم الذكي. حاول مرة أخرى."
+        : "Could not connect to the AI teacher. Please try again.";
+      console.error(error);
+    }
+  };
+
+  recognition.onerror = function(event) {
+    document.getElementById("heardText").textContent =
+      event.error === "not-allowed"
+        ? "يرجى السماح باستخدام الميكروفون."
+        : "لم أتمكن من سماعك. حاول مرة أخرى.";
+  };
+
+  try {
+    recognition.start();
+  } catch (error) {
+    document.getElementById("heardText").textContent =
+      "انتظر لحظة ثم حاول مرة أخرى.";
+  }
+}
+
+function repeatAnswer() {
+  if (lastVoiceAnswer) {
+    speak(lastVoiceAnswer, currentLanguage === "en" ? "en" : "ar");
+  } else {
+    document.getElementById("voiceAnswer").textContent =
+      currentLanguage === "ar"
+        ? "اسأل مستر شفيق أولًا."
+        : "Ask Mr. Shafiq first.";
+    }
+  }
 function checkAnswer(){
  const answer=document.getElementById("quizAnswer").value,result=document.getElementById("quizResult");
  if(!answer){result.textContent=currentLanguage==="ar"?"اختر إجابة أولًا.":"Please choose an answer first.";result.style.color="#a15b00";}
