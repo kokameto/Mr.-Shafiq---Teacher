@@ -1,4 +1,181 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مستر شفيق | Mr. Shafiq</title>
+<style>
+:root{--navy:#142b4a;--blue:#2864dc;--gold:#f5bb45;--bg:#f2f5fa;--text:#202d42;--green:#198754}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--navy);color:white;padding:18px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-size:21px;font-weight:bold}.brand small{display:block;color:#cbd8ef;font-size:12px;margin-top:5px}
+button,select{font:inherit;cursor:pointer;border-radius:10px;padding:10px 13px}
+header select{color:white;background:#233f64;border:1px solid #58708f}
+main{width:min(1100px,100%);margin:auto;padding:18px 14px 35px}
+.welcome{background:linear-gradient(120deg,#e1ebff,#fff5d9);border-radius:18px;padding:23px 19px;margin-bottom:18px}
+.welcome h1{margin:0 0 10px;font-size:26px}.welcome p{line-height:1.8;margin-bottom:0}
+.layout{display:grid;grid-template-columns:1fr 1.3fr;gap:16px}
+.card{background:white;border-radius:17px;padding:18px;box-shadow:0 5px 20px #142b4a0b;margin-bottom:16px}
+.card h2{font-size:20px;margin-top:0}
+.teacher{background:#e8effb;border-radius:14px;padding:16px;text-align:center}
+.avatar{font-size:95px;line-height:1.5;filter:drop-shadow(0 5px 3px #0001)}
+.teacher h3{margin:5px 0}.teacher p{line-height:1.7}
+.primary{background:var(--blue);color:white;border:0;font-weight:bold}
+.secondary{background:white;border:1px solid #d6deea;color:var(--navy)}
+.buttons{display:flex;flex-wrap:wrap;gap:9px}
+.board{background:#173d3a;color:white;border-radius:13px;padding:19px;min-height:190px;line-height:1.9}
+.board h3{color:#f8d775;margin-top:0}.english{direction:ltr;text-align:left;font-size:18px}
+.word{color:#ffe18a;font-weight:bold;font-size:25px}
+input,select.quiz-select{width:100%;padding:12px;border:1px solid #d3dbe8;border-radius:9px;margin:8px 0;background:white}
+.answer{padding:12px;background:#f5f7fb;border-radius:10px;margin:9px 0;line-height:1.6}
+footer{text-align:center;color:#69758a;padding:18px;font-size:13px}.status{margin-top:12px;font-weight:bold}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.welcome h1{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">🎓 مستر شفيق<small>Mr. Shafiq — Your AI Teacher</small></div>
+  <select id="language" onchange="changeLanguage()"><option value="ar">العربية</option><option value="en">English</option></select>
+</header>
+<main>
+<section class="welcome">
+<h1 id="welcomeTitle">أهلًا بك في فصل مستر شفيق!</h1>
+<p id="welcomeText">تعلّم الإنجليزية بطريقة ممتعة. استمع إلى الكلمات، اقرأ الدرس، وأجب عن الأسئلة لتختبر فهمك.</p>
+</section>
+<div class="layout">
+<div>
+<section class="card">
+<h2 id="teacherTitle">👨‍🏫 معلمك اليوم</h2>
+<div class="teacher">
+<div class="avatar" aria-label="رمز المعلم">👨🏻‍🏫</div><h3>Mr. Shafiq</h3>
+<p id="teacherText">أهلًا يا بطل! أنا مستر شفيق، وسنتعلم اليوم بعض الكلمات الإنجليزية الجديدة معًا.</p>
+<div class="buttons">
+<button class="primary" onclick="welcomeSpeech()" id="greetButton">🔊 استمع إلى المعلم</button>
+<button class="secondary" onclick="stopSpeech()" id="stopButton">⏹ إيقاف الصوت</button>
+</div>
+<p id="voiceStatus" class="status" aria-live="polite"></p>
+</div></section>
+<section class="card">
+<h2 id="practiceTitle">💬 تدرّب مع المعلم</h2>
+<p id="practiceText">اكتب كلمة أو جملة باللغة الإنجليزية، وسيعرض لك المعلم رسالة تدريبية مبدئية.</p>
+<input id="studentInput" type="text" placeholder="اكتب هنا باللغة الإنجليزية..." dir="auto">
+<button class="primary" onclick="respondToStudent()" id="askButton">اسأل مستر شفيق</button>
+<div id="studentResponse" class="answer" aria-live="polite">مستر شفيق ينتظرك! 😊</div>
+<hr>
+<h3 id="voiceChatTitle">🎙️ المحادثة الصوتية التجريبية</h3>
+<p id="voiceChatHelp">اضغط على الميكروفون وتحدث بالإنجليزية. سيجيب مستر شفيق عن بعض العبارات الشائعة بصوت مسموع.</p>
+<div class="buttons">
+<button class="primary" onclick="startListening()" id="listenButton">🎙️ تحدث الآن</button>
+<button class="secondary" onclick="repeatAnswer()" id="repeatButton">🔊 استمع إلى الإجابة</button>
+</div>
+<div id="heardText" class="answer" aria-live="polite">لم تبدأ المحادثة بعد.</div>
+<div id="voiceAnswer" class="answer" aria-live="polite">مستر شفيق يستمع إليك! 😊</div>
+</section>
+</div>
+<div>
+<section class="card">
+<h2 id="lessonTitle">📚 درس اليوم: التحيات</h2>
+<div class="board"><h3 id="boardTitle">English Lesson — Greetings</h3><div class="english">
+<p><span class="word">Hello!</span><br>Hello means a friendly greeting.</p>
+<p><span class="word">Good morning!</span><br>We say this in the morning.</p>
+<p><span class="word">How are you?</span><br>Ask someone about how they feel.</p>
+</div></div>
+<div class="answer"><strong>Hello!</strong> — مرحبًا! <button class="secondary" onclick="speak('Hello!','en')">🔊</button></div>
+<div class="answer"><strong>Good morning!</strong> — صباح الخير! <button class="secondary" onclick="speak('Good morning!','en')">🔊</button></div>
+<div class="answer"><strong>How are you?</strong> — كيف حالك؟ <button class="secondary" onclick="speak('How are you?','en')">🔊</button></div>
+</section>
+<section class="card">
+<h2 id="quizTitle">📝 اختبر نفسك</h2><p id="question">ما معنى "Good morning"؟</p>
+<select class="quiz-select" id="quizAnswer"><option value="">اختر الإجابة</option><option value="a">صباح الخير</option><option value="b">إلى اللقاء</option><option value="c">تصبح على خير</option></select>
+<button class="primary" onclick="checkAnswer()" id="checkButton">تحقق من الإجابة</button>
+<div id="quizResult" class="status" aria-live="polite"></div>
+</section>
+</div>
+</div>
+</main>
+<footer>© 2026 Mr. Shafiq Teacher — Learning starts with curiosity.</footer>
+<script>
+let currentLanguage="ar";
+let lastVoiceAnswer="";
+function speak(text,lang="en"){
+ const status=document.getElementById("voiceStatus");
+ if(!("speechSynthesis" in window)){status.textContent=currentLanguage==="ar"?"المتصفح لا يدعم خاصية النطق.":"Speech is not supported by this browser.";return;}
+ window.speechSynthesis.cancel();
+ const utterance=new SpeechSynthesisUtterance(text);
+ utterance.lang=lang==="en"?"en-US":"ar-SA";utterance.rate=0.85;
+ utterance.onstart=()=>{status.textContent=currentLanguage==="ar"?"🔊 المعلم يتحدث الآن...":"🔊 The teacher is speaking...";};
+ utterance.onend=()=>{status.textContent="";};
+ window.speechSynthesis.speak(utterance);
+}
+function welcomeSpeech(){if(currentLanguage==="ar")speak("Hello champion! I am Mr. Shafiq. Today we will learn English together.","en");else speak("Hello! I am Mr. Shafiq. Welcome to our English lesson.","en");}
+function stopSpeech(){if("speechSynthesis" in window)window.speechSynthesis.cancel();document.getElementById("voiceStatus").textContent="";}
+function respondToStudent(){
+ const input=document.getElementById("studentInput").value.trim(),response=document.getElementById("studentResponse");
+ if(!input){response.textContent=currentLanguage==="ar"?"اكتب كلمة أو جملة أولًا، وسنبدأ التدريب!":"Type a word or sentence first, and let's practise!";return;}
+ response.textContent=currentLanguage==="ar"?"أحسنت على المحاولة! اقرأ ما كتبت بصوت مرتفع. هذه النسخة تجريبية؛ المحادثة الذكية الحقيقية تحتاج إلى ربط خدمة ذكاء اصطناعي.":"Great effort! Try reading your sentence aloud. This prototype needs an AI service connection for real intelligent conversation.";
+}
+function startListening(){
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SpeechRecognition){document.getElementById("heardText").textContent=currentLanguage==="ar"?"متصفحك لا يدعم التعرف على الصوت. جرّب فتح الموقع في Google Chrome واسمح باستخدام الميكروفون.":"Your browser does not support speech recognition. Try Google Chrome and allow microphone access.";return;}
+ const recognition=new SpeechRecognition();recognition.lang="en-US";recognition.interimResults=false;recognition.maxAlternatives=1;
+ document.getElementById("heardText").textContent=currentLanguage==="ar"?"🎙️ أستمع إليك الآن... تحدث بالإنجليزية.":"🎙️ Listening... Speak in English.";
+ recognition.onresult=function(event){
+  const studentText=event.results[0][0].transcript.trim();
+  document.getElementById("heardText").textContent=(currentLanguage==="ar"?"أنت قلت: ":"You said: ")+studentText;
+  const text=studentText.toLowerCase();let answer;
+  if(text.includes("hello")||text.includes("hi"))answer="Hello! Welcome to my English class. How are you today?";
+  else if(text.includes("how are you"))answer="I am fine, thank you! How are you?";
+  else if(text.includes("your name")||text.includes("who are you"))answer="My name is Mr. Shafiq. I am your English teacher.";
+  else if(text.includes("thank"))answer="You are welcome! Keep practising your English.";
+  else if(text.includes("good morning"))answer="Good morning! I hope you have a wonderful day.";
+  else answer="Good try! Please say that again using a simple English sentence.";
+  lastVoiceAnswer=answer;
+  document.getElementById("voiceAnswer").textContent=(currentLanguage==="ar"?"مستر شفيق: ":"Mr. Shafiq: ")+answer;
+  speak(answer,"en");
+ };
+ recognition.onerror=function(event){
+  let msg="لم أتمكن من سماعك. تأكد من السماح باستخدام الميكروفون، ثم حاول مجددًا.";
+  if(event.error==="not-allowed")msg="الميكروفون غير مسموح. افتح إعدادات الموقع واسمح باستخدام الميكروفون.";
+  if(event.error==="no-speech")msg="لم أسمع صوتًا. حاول التحدث بوضوح ثم أعد المحاولة.";
+  document.getElementById("heardText").textContent=currentLanguage==="ar"?msg:"I couldn't hear you. Check microphone permission and try again.";
+ };
+ try{recognition.start();}catch(e){document.getElementById("heardText").textContent="انتظر لحظة ثم حاول مرة أخرى.";}
+}
+function repeatAnswer(){if(lastVoiceAnswer)speak(lastVoiceAnswer,"en");else document.getElementById("voiceAnswer").textContent=currentLanguage==="ar"?"تحدث أولًا حتى يتمكن مستر شفيق من الرد عليك.":"Speak first so Mr. Shafiq can reply.";}
+function checkAnswer(){
+ const answer=document.getElementById("quizAnswer").value,result=document.getElementById("quizResult");
+ if(!answer){result.textContent=currentLanguage==="ar"?"اختر إجابة أولًا.":"Please choose an answer first.";result.style.color="#a15b00";}
+ else if(answer==="a"){result.textContent=currentLanguage==="ar"?"🎉 إجابة صحيحة! ممتاز يا بطل!":"🎉 Correct! Excellent work!";result.style.color="#198754";}
+ else{result.textContent=currentLanguage==="ar"?"حاول مرة أخرى. تذكّر: Good morning تعني صباح الخير.":"Try again. Remember: Good morning means صباح الخير.";result.style.color="#c0392b";}
+}
+function changeLanguage(){
+ currentLanguage=document.getElementById("language").value;const isArabic=currentLanguage==="ar";
+ document.documentElement.lang=currentLanguage;document.documentElement.dir=isArabic?"rtl":"ltr";
+ const set=(id,ar,en)=>document.getElementById(id).textContent=isArabic?ar:en;
+ set("welcomeTitle","أهلًا بك في فصل مستر شفيق!","Welcome to Mr. Shafiq's Classroom!");
+ set("welcomeText","تعلّم الإنجليزية بطريقة ممتعة. استمع إلى الكلمات، اقرأ الدرس، وأجب عن الأسئلة لتختبر فهمك.","Learn English in a fun way. Listen to words, read the lesson, and answer questions to test your understanding.");
+ set("teacherTitle","👨‍🏫 معلمك اليوم","👨‍🏫 Your Teacher");
+ set("teacherText","أهلًا يا بطل! أنا مستر شفيق، وسنتعلم اليوم بعض الكلمات الإنجليزية الجديدة معًا.","Hello, champion! I am Mr. Shafiq. Today we will learn some new English words together.");
+ set("greetButton","🔊 استمع إلى المعلم","🔊 Listen to the teacher");set("stopButton","⏹ إيقاف الصوت","⏹ Stop audio");
+ set("practiceTitle","💬 تدرّب مع المعلم","💬 Practise with the Teacher");
+ set("practiceText","اكتب كلمة أو جملة باللغة الإنجليزية، وسيعرض لك المعلم رسالة تدريبية مبدئية.","Type an English word or sentence to practise.");
+ document.getElementById("studentInput").placeholder=isArabic?"اكتب هنا باللغة الإنجليزية...":"Type in English here...";
+ set("askButton","اسأل مستر شفيق","Ask Mr. Shafiq");set("voiceChatTitle","🎙️ المحادثة الصوتية التجريبية","🎙️ Experimental Voice Conversation");
+ set("voiceChatHelp","اضغط على الميكروفون وتحدث بالإنجليزية. سيجيب مستر شفيق عن بعض العبارات الشائعة بصوت مسموع.","Tap the microphone and speak in English. Mr. Shafiq will respond aloud to some common phrases.");
+ set("listenButton","🎙️ تحدث الآن","🎙️ Speak now");set("repeatButton","🔊 استمع إلى الإجابة","🔊 Hear the answer");
+ set("lessonTitle","📚 درس اليوم: التحيات","📚 Today's Lesson: Greetings");
+ set("quizTitle","📝 اختبر نفسك","📝 Test Yourself");
+ set("question",'ما معنى "Good morning"؟','What does "Good morning" mean?');
+ set("checkButton","تحقق من الإجابة","Check Answer");
+ const select=document.getElementById("quizAnswer");select.options[0].text=isArabic?"اختر الإجابة":"Choose an answer";select.options[1].text=isArabic?"صباح الخير":"Good morning";select.options[2].text=isArabic?"إلى اللقاء":"Goodbye";select.options[3].text=isArabic?"تصبح على خير":"Good night";
+ document.getElementById("studentResponse").textContent=isArabic?"مستر شفيق ينتظرك! 😊":"Mr. Shafiq is waiting for you! 😊";
+ document.getElementById("quizResult").textContent="";document.getElementById("voiceStatus").textContent="";
+}
+</script>
+</body>
+</html>
+
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
