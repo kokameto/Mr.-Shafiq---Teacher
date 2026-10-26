@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>مستر شفيق | Mr. Shafiq</title>
 
 <style>
@@ -50,11 +50,7 @@ main { max-width:1050px; margin:auto; padding:16px; }
 h1 { font-size:25px; margin:0 0 10px; }
 h2 { font-size:20px; margin:0 0 13px; }
 p { line-height:1.7; }
-.layout {
-  display:grid;
-  grid-template-columns:1fr 1.2fr;
-  gap:16px;
-}
+.layout { display:grid; grid-template-columns:1fr 1.2fr; gap:16px; }
 .teacher {
   text-align:center;
   background:#eaf0fc;
@@ -76,11 +72,7 @@ p { line-height:1.7; }
 button,select,input { font:inherit; border-radius:9px; padding:11px; }
 button { cursor:pointer; border:0; }
 .primary { background:var(--blue); color:white; font-weight:bold; }
-.secondary {
-  background:white;
-  border:1px solid #cbd6e6;
-  color:var(--navy);
-}
+.secondary { background:white; border:1px solid #cbd6e6; color:var(--navy); }
 button:disabled { opacity:.6; cursor:wait; }
 input,select {
   width:100%;
@@ -136,7 +128,6 @@ header select {
     🎓 مستر شفيق
     <small>Mr. Shafiq — Your AI Teacher</small>
   </div>
-
   <select id="language" aria-label="Language" onchange="changeLanguage()">
     <option value="ar">العربية</option>
     <option value="en">English</option>
@@ -146,29 +137,17 @@ header select {
 <main>
   <section class="welcome">
     <h1 id="welcomeTitle">أهلًا بك في فصل مستر شفيق!</h1>
-    <p id="welcomeText">
-      ارفع كتبك، واختر كتابًا، ثم اطلب من مستر شفيق شرح الدرس بالاعتماد على محتواه.
-    </p>
+    <p id="welcomeText">ارفع كتابك، واختره، ثم اطلب من مستر شفيق شرح الدرس بالاعتماد على محتواه.</p>
   </section>
 
   <section class="card">
     <h2>📚 مكتبة الكتب</h2>
-    <p class="note">
-      يدعم هذا الإصدار ملفات PDF النصية وWord بصيغة DOCX.
-      ملفات PDF المصورة تحتاج إلى OCR غير متوفر في هذه النسخة.
-    </p>
+    <p class="note">يدعم هذا الإصدار ملفات PDF النصية وWord بصيغة DOCX. ملفات PDF المصورة تحتاج إلى OCR غير متوفر هنا.</p>
 
     <label for="bookFile">اختر كتاب PDF أو DOCX</label>
-    <input
-      class="file"
-      id="bookFile"
-      type="file"
-      accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    >
+    <input class="file" id="bookFile" type="file" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
 
-    <button class="primary" id="uploadButton" onclick="uploadBook()">
-      ⬆️ رفع الكتاب وحفظه
-    </button>
+    <button class="primary" id="uploadButton" onclick="uploadBook()">⬆️ رفع الكتاب وحفظه</button>
     <p id="bookStatus" class="status" aria-live="polite"></p>
 
     <h3>الكتب المحفوظة</h3>
@@ -176,7 +155,6 @@ header select {
     <select id="bookSelect">
       <option value="">كل الكتب المحفوظة / بدون كتاب محدد</option>
     </select>
-
     <button class="secondary" onclick="loadBooks()">تحديث المكتبة</button>
     <ul id="bookList" class="book-list"></ul>
   </section>
@@ -188,17 +166,10 @@ header select {
         <div class="teacher">
           <div class="avatar">👨🏻‍🏫</div>
           <h3>Mr. Shafiq</h3>
-          <p id="teacherText">
-            أهلًا يا بطل! اسألني عن أي درس في الكتاب الذي اخترته.
-          </p>
-
+          <p id="teacherText">أهلًا يا بطل! اسألني عن أي درس في الكتاب الذي اخترته.</p>
           <div class="buttons">
-            <button class="primary" onclick="welcomeSpeech()" id="welcomeSpeak">
-              🔊 استمع إلى المعلم
-            </button>
-            <button class="secondary" onclick="stopSpeech()" id="stopButton">
-              ⏹ إيقاف الصوت
-            </button>
+            <button class="primary" onclick="welcomeSpeech()">🔊 استمع إلى المعلم</button>
+            <button class="secondary" onclick="stopSpeech()">⏹ إيقاف الصوت</button>
           </div>
           <p id="voiceStatus" class="status" aria-live="polite"></p>
         </div>
@@ -206,38 +177,21 @@ header select {
 
       <section class="card">
         <h2 id="askTitle">💬 اسأل مستر شفيق</h2>
-        <p id="askHelp">
-          اكتب سؤالك. إذا اخترت كتابًا من المكتبة، سيحاول المعلم الاعتماد على نص ذلك الكتاب.
-        </p>
-
+        <p id="askHelp">اكتب سؤالك. إذا اخترت كتابًا من المكتبة، سيحاول المعلم الاعتماد على نص ذلك الكتاب.</p>
         <input id="questionInput" placeholder="مثال: اشرح لي الوحدة الأولى" autocomplete="off">
-
         <div class="buttons">
           <button class="primary" id="askButton" onclick="askTeacher()">إرسال السؤال</button>
-          <button class="secondary" onclick="speakLastAnswer()" id="speakButton">
-            🔊 استمع إلى الإجابة
-          </button>
+          <button class="secondary" onclick="speakLastAnswer()" id="speakButton">🔊 استمع إلى الإجابة</button>
         </div>
-
-        <div id="answer" class="answer" aria-live="polite">
-          مستر شفيق جاهز لمساعدتك.
-        </div>
-
+        <div id="answer" class="answer" aria-live="polite">مستر شفيق جاهز لمساعدتك.</div>
         <hr>
-
         <h3 id="voiceTitle">🎙️ المحادثة الصوتية</h3>
         <p id="voiceHelp">اسمح باستخدام الميكروفون ثم تحدث باللغة المختارة.</p>
-
         <div class="buttons">
-          <button class="primary" id="micButton" onclick="startListening()">
-            🎙️ تحدث الآن
-          </button>
+          <button class="primary" id="micButton" onclick="startListening()">🎙️ تحدث الآن</button>
           <button class="secondary" onclick="repeatVoiceAnswer()">🔊 أعد الإجابة</button>
         </div>
-
-        <div id="heard" class="answer" aria-live="polite">
-          لم تبدأ المحادثة بعد.
-        </div>
+        <div id="heard" class="answer" aria-live="polite">لم تبدأ المحادثة بعد.</div>
         <div id="voiceAnswer" class="answer" aria-live="polite"></div>
       </section>
     </div>
@@ -245,7 +199,6 @@ header select {
     <div>
       <section class="card">
         <h2 id="lessonTitle">📘 مثال تعليمي: التحيات</h2>
-
         <div class="board">
           <h3>English Lesson — Greetings</h3>
           <div class="english">
@@ -254,26 +207,19 @@ header select {
             <p><span class="word">How are you?</span><br>Ask someone how they feel.</p>
           </div>
         </div>
-
-        <p>
-          يمكنك رفع كتابك واختيار درس محدد ليصبح هو مرجع الشرح بدل المثال التجريبي.
-        </p>
+        <p>يمكنك رفع كتابك واختيار درس محدد ليصبح هو مرجع الشرح بدل المثال التجريبي.</p>
       </section>
 
       <section class="card">
         <h2 id="quizTitle">📝 اختبر نفسك</h2>
         <p id="quizQuestion">ما معنى Good morning؟</p>
-
         <select id="quizSelect">
           <option value="">اختر الإجابة</option>
           <option value="a">صباح الخير</option>
           <option value="b">إلى اللقاء</option>
           <option value="c">تصبح على خير</option>
         </select>
-
-        <button class="primary" onclick="checkQuiz()" id="quizButton">
-          تحقق من الإجابة
-        </button>
+        <button class="primary" onclick="checkQuiz()" id="quizButton">تحقق من الإجابة</button>
         <p id="quizResult" class="status" aria-live="polite"></p>
       </section>
     </div>
@@ -285,32 +231,36 @@ header select {
 <script>
 "use strict";
 
-/*
-  يجب أن يكون هذا العنوان هو عنوان Cloudflare Worker الخاص بك.
-  لا تضع مفتاح Gemini هنا؛ احتفظ به سرًا داخل Cloudflare.
-*/
 const WORKER_URL = "https://mr-shafiq-teacher.koka878.workers.dev/";
 const MAX_FILE_BYTES = 15 * 1024 * 1024;
-
 let language = "ar";
 let lastAnswer = "";
 let lastVoice = "";
 let recognition = null;
-
 const el = id => document.getElementById(id);
+
+async function requestJSON(path, options = {}) {
+  const response = await fetch(WORKER_URL + path.replace(/^\/+/, ""), options);
+  const text = await response.text();
+  let data = {};
+  try { data = text ? JSON.parse(text) : {}; }
+  catch { throw new Error("وصل رد غير مفهوم من الخادم."); }
+  if (!response.ok) throw new Error(data.error || "حدث خطأ في الاتصال.");
+  return data;
+}
 
 function cleanForSpeech(value) {
   return String(value || "")
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`([^`]+)`/g, "$1")
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/https?:\/\/\S+/g, " ")
+    .replace(/https?:\/\/\S+/gi, " ")
     .replace(/^\s*[-+•]\s+/gm, "")
     .replace(/[*_~#>|]/g, " ")
     .replace(/[()[\]{}<>]/g, " ")
-    .replace(/[=+\\\/|^%$@]/g, " ")
-    .replace(/[ \t]+/g, " ")
+    .replace(/[=+\\\/|^%$@&]/g, " ")
+    .replace(/[⭐️✨🎓📚📝🔊🎙️👨‍🏫👉✅❌➡️]/gu, " ")
+    .replace(/[.,،؛;:!?؟…"'“”‘’ـ—–-]+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -319,68 +269,30 @@ function speak(text, lang = language) {
     el("voiceStatus").textContent = "ميزة الصوت غير مدعومة في هذا المتصفح.";
     return;
   }
-
   const cleaned = cleanForSpeech(text);
   if (!cleaned) return;
-
-  window.speechSynthesis.cancel();
-
+  speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(cleaned);
   utterance.lang = lang === "en" ? "en-US" : "ar-SA";
   utterance.rate = 0.9;
-
-  utterance.onstart = () => {
-    el("voiceStatus").textContent = language === "ar"
-      ? "المعلم يتحدث الآن…"
-      : "Teacher is speaking…";
-  };
-
-  utterance.onend = () => {
-    el("voiceStatus").textContent = "";
-  };
-
-  utterance.onerror = () => {
-    el("voiceStatus").textContent = language === "ar"
-      ? "تعذر تشغيل الصوت."
-      : "Could not play audio.";
-  };
-
-  window.speechSynthesis.speak(utterance);
+  utterance.onstart = () => el("voiceStatus").textContent = lang === "ar" ? "المعلم يتحدث الآن…" : "Teacher is speaking…";
+  utterance.onend = () => el("voiceStatus").textContent = "";
+  utterance.onerror = () => el("voiceStatus").textContent = lang === "ar" ? "تعذر تشغيل الصوت." : "Could not play audio.";
+  speechSynthesis.speak(utterance);
 }
 
 function stopSpeech() {
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
-  el("voiceStatus").textContent = "";
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+  el("voiceStatus").textContent = "تم إيقاف الصوت.";
 }
 
 function welcomeSpeech() {
   speak(language === "ar"
-    ? "أهلًا بك في فصل مستر شفيق. اختر كتابًا واكتب سؤالك، وسأساعدك على الفهم خطوة بخطوة."
-    : "Welcome to Mr. Shafiq's classroom. Choose a book and ask your question. I will help you learn step by step.");
-}
-
-async function requestJSON(path, options = {}) {
-  const response = await fetch(WORKER_URL + path, options);
-  let data = {};
-
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error("لم يصل رد مفهوم من الخادم.");
-  }
-
-  if (!response.ok) {
-    throw new Error(data.error || `فشل الطلب (${response.status})`);
-  }
-
-  return data;
+    ? "أهلًا بك في فصل مستر شفيق. أنا هنا لمساعدتك على فهم دروسك خطوة بخطوة."
+    : "Welcome to Mr. Shafiq's classroom. I am here to help you understand your lessons step by step.");
 }
 
 async function askAI(question) {
-  const bookId = el("bookSelect").value;
-
   const data = await requestJSON("ask", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -388,32 +300,21 @@ async function askAI(question) {
       question,
       message: question,
       language,
-      bookId
+      bookId: el("bookSelect").value
     })
   });
-
-  if (typeof data.answer !== "string" || !data.answer.trim()) {
-    throw new Error("لم تصل إجابة من الذكاء الاصطناعي.");
-  }
-
-  return data.answer.trim();
+  if (!data.answer) throw new Error("لم تصل إجابة من المعلم.");
+  return data.answer;
 }
 
 async function askTeacher() {
   const question = el("questionInput").value.trim();
-
   if (!question) {
-    el("answer").textContent = language === "ar"
-      ? "اكتب سؤالك أولًا."
-      : "Please enter a question first.";
+    el("answer").textContent = language === "ar" ? "اكتب سؤالك أولًا." : "Please type your question first.";
     return;
   }
-
   el("askButton").disabled = true;
-  el("answer").textContent = language === "ar"
-    ? "مستر شفيق يفكر في سؤالك…"
-    : "Mr. Shafiq is thinking…";
-
+  el("answer").textContent = language === "ar" ? "مستر شفيق يفكر… انتظر قليلًا." : "Mr. Shafiq is thinking…";
   try {
     lastAnswer = await askAI(question);
     el("answer").textContent = lastAnswer;
@@ -425,56 +326,36 @@ async function askTeacher() {
 }
 
 function speakLastAnswer() {
-  if (lastAnswer) {
-    speak(lastAnswer);
-  } else {
-    el("answer").textContent = language === "ar"
-      ? "اسأل مستر شفيق أولًا."
-      : "Ask Mr. Shafiq a question first.";
-  }
+  if (lastAnswer) speak(lastAnswer);
+  else el("answer").textContent = language === "ar" ? "اسأل مستر شفيق أولًا." : "Ask Mr. Shafiq a question first.";
 }
 
 function repeatVoiceAnswer() {
-  if (lastVoice) {
-    speak(lastVoice);
-  } else {
-    el("voiceAnswer").textContent = language === "ar"
-      ? "تحدث أولًا حتى يجيبك المعلم."
-      : "Speak first to get an answer.";
-  }
+  if (lastVoice) speak(lastVoice);
+  else el("voiceAnswer").textContent = language === "ar" ? "تحدث أولًا حتى يجيبك المعلم." : "Speak first to get an answer.";
 }
 
 function startListening() {
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
     el("heard").textContent = language === "ar"
       ? "التعرف على الصوت غير مدعوم. جرّب Google Chrome."
       : "Speech recognition is not supported. Try Chrome.";
     return;
   }
-
   if (recognition) {
     try { recognition.stop(); } catch {}
   }
-
   recognition = new SpeechRecognition();
   recognition.lang = language === "ar" ? "ar-SA" : "en-US";
   recognition.interimResults = false;
-
   el("micButton").disabled = true;
   el("heard").textContent = language === "ar" ? "أستمع إليك…" : "Listening…";
 
   recognition.onresult = async event => {
     const transcript = event.results[0][0].transcript;
-
-    el("heard").textContent =
-      (language === "ar" ? "سمعتك تقول: " : "I heard: ") + transcript;
-
-    el("voiceAnswer").textContent =
-      language === "ar" ? "أجهز الإجابة…" : "Preparing answer…";
-
+    el("heard").textContent = (language === "ar" ? "سمعتك تقول: " : "I heard: ") + transcript;
+    el("voiceAnswer").textContent = language === "ar" ? "أجهز الإجابة…" : "Preparing answer…";
     try {
       lastVoice = await askAI(transcript);
       lastAnswer = lastVoice;
@@ -484,21 +365,17 @@ function startListening() {
       el("voiceAnswer").textContent = "حدث خطأ: " + error.message;
     }
   };
-
   recognition.onerror = event => {
     el("heard").textContent = event.error === "not-allowed"
       ? "يرجى السماح باستخدام الميكروفون من إعدادات الموقع."
       : "تعذر التعرف على الصوت. حاول مرة أخرى.";
   };
-
   recognition.onend = () => {
     el("micButton").disabled = false;
     recognition = null;
   };
-
-  try {
-    recognition.start();
-  } catch {
+  try { recognition.start(); }
+  catch {
     el("micButton").disabled = false;
     el("heard").textContent = "انتظر قليلًا ثم حاول مرة أخرى.";
   }
@@ -506,111 +383,57 @@ function startListening() {
 
 async function extractText(file) {
   const name = file.name.toLowerCase();
-
   if (name.endsWith(".pdf")) {
-    if (!window.pdfjsLib) {
-      throw new Error("تعذر تحميل قارئ PDF؛ تحقق من الإنترنت.");
-    }
-
+    if (!window.pdfjsLib) throw new Error("تعذر تحميل قارئ PDF؛ تحقق من الإنترنت.");
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-    const pdf = await pdfjsLib.getDocument({
-      data: await file.arrayBuffer()
-    }).promise;
-
+    const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
     const pages = [];
-
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
-      const text = content.items
-        .map(item => item.str || "")
-        .join(" ")
-        .trim();
-
-      if (text) {
-        pages.push("[صفحة " + i + "]\n" + text);
-      }
+      const text = content.items.map(item => item.str || "").join(" ").trim();
+      if (text) pages.push("[صفحة " + i + "]\n" + text);
     }
-
     return pages.join("\n\n").trim();
   }
-
   if (name.endsWith(".docx")) {
-    if (!window.mammoth) {
-      throw new Error("تعذر تحميل قارئ Word؛ تحقق من الإنترنت.");
-    }
-
-    const result = await mammoth.extractRawText({
-      arrayBuffer: await file.arrayBuffer()
-    });
-
+    if (!window.mammoth) throw new Error("تعذر تحميل قارئ Word؛ تحقق من الإنترنت.");
+    const result = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
     return String(result.value || "").trim();
   }
-
   throw new Error("اختر ملف PDF أو Word بصيغة DOCX.");
 }
 
 async function uploadBook() {
   const file = el("bookFile").files[0];
-
-  if (!file) {
-    el("bookStatus").textContent = "اختر ملفًا أولًا.";
-    return;
-  }
-
+  if (!file) { el("bookStatus").textContent = "اختر ملفًا أولًا."; return; }
   if (file.size > MAX_FILE_BYTES) {
-    el("bookStatus").textContent =
-      "حجم الملف أكبر من 15 ميجابايت. اختر ملفًا أصغر.";
+    el("bookStatus").textContent = "حجم الملف أكبر من 15 ميجابايت. اختر ملفًا أصغر.";
     return;
   }
-
   el("uploadButton").disabled = true;
   el("bookStatus").textContent = "أقرأ الكتاب… لا تغلق الصفحة.";
-
   try {
     const text = await extractText(file);
-
     if (text.length < 20) {
-      throw new Error(
-        "لم أستطع استخراج نص. قد يكون PDF صورًا ممسوحة ضوئيًا، وهذه النسخة لا تتضمن OCR."
-      );
+      throw new Error("لم أستطع استخراج نص. قد يكون PDF صورًا ممسوحة ضوئيًا؛ OCR غير متوفر في هذه النسخة.");
     }
-
-    if (text.length > 500000) {
-      throw new Error(
-        "الكتاب طويل جدًا. قسّمه إلى ملفات أصغر لا يتجاوز نص كل منها 500 ألف حرف."
-      );
-    }
-
-    const password = prompt(
-      "أدخل كلمة مرور المكتبة التي أعددتها في Cloudflare:"
-    );
-
-    if (!password) {
-      throw new Error("تم إلغاء الرفع.");
-    }
-
+    if (text.length > 500000) throw new Error("الكتاب طويل جدًا. قسّمه إلى ملفات أصغر.");
+    const password = prompt("أدخل كلمة مرور المكتبة التي أعددتها في Cloudflare:");
+    if (!password) throw new Error("تم إلغاء الرفع.");
     const form = new FormData();
     form.append("file", file, file.name);
     form.append("extractedText", text);
-
     const data = await requestJSON("books/upload", {
       method: "POST",
       headers: { "X-Library-Password": password },
       body: form
     });
-
-    el("bookStatus").textContent =
-      "تم حفظ الكتاب بنجاح. عدد أحرف النص المستخرج: " + text.length;
-
+    el("bookStatus").textContent = "تم حفظ الكتاب بنجاح. عدد أحرف النص المستخرج: " + text.length;
     el("bookFile").value = "";
     await loadBooks();
-
-    if (data.book?.id) {
-      el("bookSelect").value = data.book.id;
-    }
+    if (data.id) el("bookSelect").value = data.id;
   } catch (error) {
     el("bookStatus").textContent = "لم يكتمل الرفع: " + error.message;
   } finally {
@@ -622,50 +445,38 @@ async function loadBooks() {
   const list = el("bookList");
   const select = el("bookSelect");
   const previous = select.value;
-
   try {
     const data = await requestJSON("books");
-
     list.replaceChildren();
     select.replaceChildren();
-
     const allOption = document.createElement("option");
     allOption.value = "";
     allOption.textContent = "كل الكتب المحفوظة / بدون كتاب محدد";
     select.appendChild(allOption);
 
-    if (!data.books?.length) {
+    if (!data.books || !data.books.length) {
       const li = document.createElement("li");
       li.textContent = "لم تُرفع كتب بعد.";
       list.appendChild(li);
       return;
     }
-
     for (const book of data.books) {
       const option = document.createElement("option");
       option.value = book.id;
       option.textContent = book.name;
       select.appendChild(option);
-
       const li = document.createElement("li");
       const name = document.createElement("span");
       const remove = document.createElement("button");
-
       name.className = "book-name";
-      name.textContent = book.name + " — " +
-        Math.max(1, Math.round((book.size || 0) / 1024)) + " KB";
-
+      name.textContent = book.name + " — " + Math.max(1, Math.round((book.size || 0) / 1024)) + " KB";
       remove.className = "secondary";
       remove.textContent = "حذف";
       remove.onclick = () => deleteBook(book.id, book.name);
-
       li.append(name, remove);
       list.appendChild(li);
     }
-
-    if ([...select.options].some(option => option.value === previous)) {
-      select.value = previous;
-    }
+    if ([...select.options].some(option => option.value === previous)) select.value = previous;
   } catch (error) {
     list.replaceChildren();
     const li = document.createElement("li");
@@ -676,20 +487,14 @@ async function loadBooks() {
 
 async function deleteBook(id, name) {
   if (!confirm("هل تريد حذف الكتاب «" + name + "»؟")) return;
-
   const password = prompt("أدخل كلمة مرور المكتبة:");
   if (!password) return;
-
   try {
     await requestJSON("books/delete", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Library-Password": password
-      },
+      headers: { "Content-Type": "application/json", "X-Library-Password": password },
       body: JSON.stringify({ id })
     });
-
     el("bookStatus").textContent = "تم حذف الكتاب.";
     await loadBooks();
   } catch (error) {
@@ -699,7 +504,6 @@ async function deleteBook(id, name) {
 
 function checkQuiz() {
   const value = el("quizSelect").value;
-
   el("quizResult").textContent = !value
     ? "اختر إجابة أولًا."
     : value === "a"
@@ -710,66 +514,31 @@ function checkQuiz() {
 function changeLanguage() {
   language = el("language").value;
   const ar = language === "ar";
-
   document.documentElement.lang = language;
   document.documentElement.dir = ar ? "rtl" : "ltr";
-
-  el("welcomeTitle").textContent = ar
-    ? "أهلًا بك في فصل مستر شفيق!"
-    : "Welcome to Mr. Shafiq's Classroom!";
-
+  el("welcomeTitle").textContent = ar ? "أهلًا بك في فصل مستر شفيق!" : "Welcome to Mr. Shafiq's Classroom!";
   el("welcomeText").textContent = ar
-    ? "ارفع كتبك، واختر كتابًا، ثم اطلب من مستر شفيق شرح الدرس بالاعتماد على محتواه."
+    ? "ارفع كتابك، واختره، ثم اطلب من مستر شفيق شرح الدرس بالاعتماد على محتواه."
     : "Upload your books, select one, and ask Mr. Shafiq to explain its lessons.";
-
   el("teacherText").textContent = ar
     ? "أهلًا يا بطل! اسألني عن أي درس في الكتاب الذي اخترته."
     : "Hello! Ask me about a lesson in your selected book.";
-
-  el("askTitle").textContent = ar
-    ? "💬 اسأل مستر شفيق"
-    : "💬 Ask Mr. Shafiq";
-
+  el("askTitle").textContent = ar ? "💬 اسأل مستر شفيق" : "💬 Ask Mr. Shafiq";
   el("askHelp").textContent = ar
     ? "اكتب سؤالك. إذا اخترت كتابًا من المكتبة، سيحاول المعلم الاعتماد على نص ذلك الكتاب."
     : "Type your question. If you select a book, the teacher will use its text as reference.";
-
-  el("questionInput").placeholder = ar
-    ? "مثال: اشرح لي الوحدة الأولى"
-    : "Example: Explain Unit 1";
-
+  el("questionInput").placeholder = ar ? "مثال: اشرح لي الوحدة الأولى" : "Example: Explain Unit 1";
   el("askButton").textContent = ar ? "إرسال السؤال" : "Send question";
-
-  el("speakButton").textContent = ar
-    ? "🔊 استمع إلى الإجابة"
-    : "🔊 Listen to answer";
-
-  el("voiceTitle").textContent = ar
-    ? "🎙️ المحادثة الصوتية"
-    : "🎙️ Voice conversation";
-
+  el("speakButton").textContent = ar ? "🔊 استمع إلى الإجابة" : "🔊 Listen to answer";
+  el("voiceTitle").textContent = ar ? "🎙️ المحادثة الصوتية" : "🎙️ Voice conversation";
   el("voiceHelp").textContent = ar
     ? "اسمح باستخدام الميكروفون ثم تحدث باللغة المختارة."
     : "Allow microphone access, then speak in the selected language.";
-
   el("micButton").textContent = ar ? "🎙️ تحدث الآن" : "🎙️ Speak now";
-
-  el("lessonTitle").textContent = ar
-    ? "📘 مثال تعليمي: التحيات"
-    : "📘 Sample lesson: Greetings";
-
-  el("quizTitle").textContent = ar
-    ? "📝 اختبر نفسك"
-    : "📝 Test yourself";
-
-  el("quizQuestion").textContent = ar
-    ? "ما معنى Good morning؟"
-    : "What does Good morning mean?";
-
-  el("quizButton").textContent = ar
-    ? "تحقق من الإجابة"
-    : "Check answer";
-
+  el("lessonTitle").textContent = ar ? "📘 مثال تعليمي: التحيات" : "📘 Sample lesson: Greetings";
+  el("quizTitle").textContent = ar ? "📝 اختبر نفسك" : "📝 Test yourself";
+  el("quizQuestion").textContent = ar ? "ما معنى Good morning؟" : "What does Good morning mean?";
+  el("quizButton").textContent = ar ? "تحقق من الإجابة" : "Check answer";
   el("quizSelect").options[0].text = ar ? "اختر الإجابة" : "Choose an answer";
   el("quizSelect").options[1].text = ar ? "صباح الخير" : "Good morning";
   el("quizSelect").options[2].text = ar ? "إلى اللقاء" : "Goodbye";
@@ -777,11 +546,8 @@ function changeLanguage() {
 }
 
 el("questionInput").addEventListener("keydown", event => {
-  if (event.key === "Enter") {
-    askTeacher();
-  }
+  if (event.key === "Enter") askTeacher();
 });
-
 window.addEventListener("DOMContentLoaded", loadBooks);
 </script>
 </body>
